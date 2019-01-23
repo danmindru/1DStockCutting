@@ -1,7 +1,7 @@
 var stockCutting = angular.module('stockCutting',['ngMaterial','ngStorage','ngFileUpload','pascalprecht.translate']);
 
 stockCutting.config(['$mdThemingProvider','$translateProvider',function($mdThemingProvider,$translateProvider) {
-  
+
   $mdThemingProvider.definePalette('customPalette', {
     '50': '#858585',
     '100': '#5e5e5e',
@@ -48,38 +48,39 @@ stockCutting.config(['$mdThemingProvider','$translateProvider',function($mdThemi
     RESULT_CUT_LIST: 'Cut List',
     RESULT_STOCK_PREFIX: 'Stock ',
   });
-  $translateProvider.translations('fr', {
-    TITLE: 'Calepinage 1D',
-    TITLE_UPLOAD_ARIA: 'Charger un project sauvegardé',
-    TITLE_DOWNLOAD_ARIA: 'Sauvegarder le projet',
-    FORM_NAME: 'Nom du projet',
-    FORM_UNITS: 'Unités',
-    FORM_STOCK: 'Longueur du brut',
-    FORM_CUT: 'Largeur de coupe',
-    FORM_ALGORITHM: 'Algorithme',
-    FORM_BUTTON_ADD: 'AJOUTER UNE PIECE',
-    FORM_ADD_ARIA: 'Ajouter une pièce',
-    FORM_PART_LENGTH: 'Longueur',
-    FORM_PART_QTT : 'Quantité',
-    FORM_PART_REMOVE_ARIA: 'Supprimer la pièce',
+  $translateProvider.translations('ro', {
+    TITLE: 'Taiere optimizata 1D',
+    TITLE_UPLOAD_ARIA: 'Incarca proiect salvat pe hard-disk',
+    TITLE_DOWNLOAD_ARIA: 'Salvare proiect pe hard-disk',
 
-    RESULT_TITLE: 'Liste de découpe',
-    RESULT_PRINT_ARIA: 'Imprimer la liste de découpe', 
-    RESULT_INVENTORY: 'Inventaire',
-    RESULT_STOCK_NEEDED: 'Stock nécessaire',
-    RESULT_TOTAL_LENGTH: 'Longueur totale',
-    RESULT_WASTE: 'Déchets',
+    FORM_NAME: 'Nume proiect',
+    FORM_UNITS: 'Unitate de masura (i.e. m)',
+    FORM_STOCK: 'Lungime stoc (i.e. 12)',
+    FORM_CUT: 'Marime taietura (i.e. 0.1)',
+    FORM_ALGORITHM: 'Algoritm',
+    FORM_BUTTON_ADD: 'Adauga parte de taiat',
+    FORM_ADD_ARIA: 'Adauga parte de taiat',
+    FORM_PART_LENGTH: 'Lungime',
+    FORM_PART_QTT: 'Cantitate',
+    FORM_PART_REMOVE_ARIA: 'Sterge',
 
-    RESULT_CUT_LIST: 'Liste de découpe',
-    RESULT_STOCK_PREFIX: 'Stock ',
+    RESULT_TITLE: 'Lista taieturi',
+    RESULT_PRINT_ARIA: 'Printeaza lista taieturi',
+    RESULT_INVENTORY: 'Inventar',
+    RESULT_STOCK_NEEDED: 'Stoc necesar',
+    RESULT_TOTAL_LENGTH: 'Marime totala',
+    RESULT_WASTE: 'Pierderi',
+
+    RESULT_CUT_LIST: 'Lista taieturi',
+    RESULT_STOCK_PREFIX: 'Stoc ',
   });
   $translateProvider
-    .registerAvailableLanguageKeys(['en', 'fr'], {
+    .registerAvailableLanguageKeys(['en', 'ro'], {
          'en*': 'en',
-         'fr*': 'fr',
+         'ro*': 'ro',
      })
     .determinePreferredLanguage()
-    .fallbackLanguage('en')
+    .fallbackLanguage('ro')
     .useSanitizeValueStrategy('escape');
 }]);
 
@@ -117,16 +118,10 @@ stockCutting.controller('1DCtrl', ['$scope','$localStorage','$window','$timeout'
   $scope.project = $localStorage.$default({
     name:'Default Project',
     alg:4,
-    cutSize: 10,
-    parts: [
-      {size:1560, quantity:3},
-      {size:610, quantity:4},
-      {size:520, quantity:2},
-      {size:700, quantity:2},
-      {size:180, quantity:10},
-    ],
-    stockLength:3000,
-    units:'mm'
+    cutSize:0,
+    parts: [],
+    stockLength:12,
+    units: 'm'
   });
 
   $scope.cutList = {};
@@ -142,7 +137,7 @@ stockCutting.controller('1DCtrl', ['$scope','$localStorage','$window','$timeout'
         for (var j = 0;j < parts[i].quantity; j++) {
           items.push(parts[i].size+cutSize);
         }
-      }          
+      }
     }
     var bins = new Array(items.length);
     var fn = window[method];
@@ -239,7 +234,7 @@ stockCutting.controller('1DCtrl', ['$scope','$localStorage','$window','$timeout'
     for (var bin in $scope.cutList.bins) {
       var obj = { };
       var arr = $scope.cutList.bins[bin];
-      
+
       for (i = 0, j = arr.length; i < j; i++) {
          obj[arr[i].length] = (obj[arr[i].length] || 0) + 1;
       }
@@ -301,7 +296,7 @@ stockCutting.controller('1DCtrl', ['$scope','$localStorage','$window','$timeout'
               $scope.submit();
             });
           });
-          reader.readAsText(file,'UTF-8');          
+          reader.readAsText(file,'UTF-8');
         });
       }, function (response) {
         if (response.status > 0)
@@ -309,7 +304,7 @@ stockCutting.controller('1DCtrl', ['$scope','$localStorage','$window','$timeout'
       }, function (evt) {
         file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
       });
-    }   
+    }
   };
 
   $scope.save = function() {
@@ -353,7 +348,7 @@ stockCutting.controller('1DCtrl', ['$scope','$localStorage','$window','$timeout'
   };
 
   var w = angular.element($window);
-  
+
   w.onbeforprint = function() {
     console.log("GOING TO PRINT");
   };
