@@ -15,7 +15,7 @@
   <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="styles/lib.min.css">
   <link rel="stylesheet" href="styles/styles.min.css">
-    
+
   <!-- inject -->
 </head>
 <body>
@@ -24,7 +24,7 @@
   <![endif]-->
 
   <!-- Add your site or application content here -->
-    <div ng-controller="1DCtrl" layout="row">
+    <div ng-controller="1DCtrl" layout="row" ng-cloak>
       <div class="printRemove">
         <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-xs')" md-whiteframe="4">
           <md-toolbar layout="row">
@@ -93,7 +93,7 @@
                   <md-icon md-font-set="material-icons">remove_circle</md-icon>
                 </md-button>
               </md-list-item>
-            </md-list>         
+            </md-list>
           </md-content>
         </md-sidenav>
       </div>
@@ -109,7 +109,7 @@
             </md-tooltip>
             <md-icon md-font-set="material-icons" class="printRemove">print</md-icon>
           </md-button>
-        </md-toolbar>        
+        </md-toolbar>
         <md-card flex>
           <md-card-title>
             <md-card-title-text>
@@ -141,7 +141,7 @@
         </md-card>
       </div>
     </div>
-  
+
   <script src="scripts/lib.min.js"></script>
   <script src="scripts/svg.min.js"></script>
   <script src="scripts/app.min.js"></script>
