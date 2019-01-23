@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "packing algorithm for stock cutting",
   "private": true,
+  "scripts": {
+    "deploy": "git push origin `git subtree split --prefix dist master`:gh-pages --force"
+  },
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-concurrent": "^2.2.1",
