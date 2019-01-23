@@ -5,7 +5,7 @@ module.exports = {
       expand: true,
       cwd: 'src',
       src: ['**/*.html'],
-      dest: 'dist'
+      dest: 'docs'
     }]
   }
 };

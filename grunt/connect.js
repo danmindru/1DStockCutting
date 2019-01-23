@@ -1,8 +1,8 @@
 module.exports = {
-  server: {  
+  server: {
     options: {
       port: 9001,
-      base: 'dist'
+      base: 'docs'
     }
   }
 };

@@ -6,8 +6,8 @@ module.exports = {
       sourceMap: true
     },
     files: [{
-      'dist/styles/styles.min.css': ['src/styles/main.scss'],
-      'dist/styles/lib.min.css': [
+      'docs/styles/styles.min.css': ['src/styles/main.scss'],
+      'docs/styles/lib.min.css': [
         'node_modules/angular-material/angular-material.scss'
       ]
     }]
@@ -22,7 +22,7 @@ module.exports = {
       expand: true,
       cwd: 'src/styles',
       src: ['*.scss'],
-      dest: 'dist/styles',
+      dest: 'docs/styles',
       ext: '.css'
     }]
   }
