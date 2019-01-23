@@ -6,7 +6,7 @@ module.exports = {
     expand: true           // required when using cwd
   },
   svgjs: {
-    cwd: 'node_modules/svg.js/docs/',  // set working folder / root to copy
+    cwd: 'node_modules/svg.js/dist/',  // set working folder / root to copy
     src: 'svg.min.js',      // copy all files and subfolders **with ending .html**
     dest: 'docs/scripts/',    // destination folder
     expand: true
