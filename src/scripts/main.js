@@ -75,13 +75,14 @@ stockCutting.config(['$mdThemingProvider','$translateProvider',function($mdThemi
     RESULT_STOCK_PREFIX: 'Stoc ',
   });
   $translateProvider
-    .registerAvailableLanguageKeys(['en', 'ro'], {
-         'en*': 'en',
-         'ro*': 'ro',
+    .registerAvailableLanguageKeys(['ro', 'en'], {
+        'ro*': 'ro',
+        'en*': 'en',
      })
-    .determinePreferredLanguage()
-    .fallbackLanguage('ro')
+    .fallbackLanguage('en')
     .useSanitizeValueStrategy('escape');
+
+  $translateProvider.preferredLanguage('ro');
 }]);
 
 stockCutting.directive('onFinishRender',['$timeout', function ($timeout) {
@@ -116,7 +117,7 @@ stockCutting.controller('1DCtrl', ['$scope','$localStorage','$window','$timeout'
   ];
 
   $scope.project = $localStorage.$default({
-    name:'Default Project',
+    name:'Proiect #1',
     alg:4,
     cutSize:0,
     parts: [],

@@ -19,11 +19,10 @@ module.exports = {
       sourceMap: false
     },
     files: [{
-      expand: true,
-      cwd: 'src/styles',
-      src: ['*.scss'],
-      dest: 'docs/styles',
-      ext: '.css'
+      'docs/styles/styles.min.css': ['src/styles/main.scss'],
+      'docs/styles/lib.min.css': [
+        'node_modules/angular-material/angular-material.scss'
+      ]
     }]
   }
 };
