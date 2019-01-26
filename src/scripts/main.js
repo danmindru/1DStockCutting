@@ -1,366 +1,457 @@
-var stockCutting = angular.module('stockCutting',['ngMaterial','ngStorage','ngFileUpload','pascalprecht.translate']);
+var stockCutting = angular.module('stockCutting', [
+  'ngMaterial',
+  'ngStorage',
+  'ngFileUpload',
+  'pascalprecht.translate'
+]);
 
-stockCutting.config(['$mdThemingProvider','$translateProvider',function($mdThemingProvider,$translateProvider) {
+stockCutting.config([
+  '$mdThemingProvider',
+  '$translateProvider',
+  function($mdThemingProvider, $translateProvider) {
+    $mdThemingProvider.definePalette('customPalette', {
+      '50': '#858585',
+      '100': '#5e5e5e',
+      '200': '#424242',
+      '300': '#1f1f1f',
+      '400': '#0f0f0f',
+      '500': '#000000',
+      '600': '#000000',
+      '700': '#000000',
+      '800': '#000000',
+      '900': '#000000',
+      A100: '#858585',
+      A200: '#5e5e5e',
+      A400: '#0f0f0f',
+      A700: '#000000',
+      contrastDefaultColor: 'light',
+      contrastDarkColors: '50 A100'
+    });
+    $mdThemingProvider
+      .theme('default')
+      .primaryPalette('customPalette')
+      .accentPalette('green');
 
-  $mdThemingProvider.definePalette('customPalette', {
-    '50': '#858585',
-    '100': '#5e5e5e',
-    '200': '#424242',
-    '300': '#1f1f1f',
-    '400': '#0f0f0f',
-    '500': '#000000',
-    '600': '#000000',
-    '700': '#000000',
-    '800': '#000000',
-    '900': '#000000',
-    'A100': '#858585',
-    'A200': '#5e5e5e',
-    'A400': '#0f0f0f',
-    'A700': '#000000',
-    'contrastDefaultColor': 'light',
-    'contrastDarkColors': '50 A100'
-  });
-  $mdThemingProvider.theme('default').primaryPalette('customPalette').accentPalette('green');
+    $translateProvider.translations('en', {
+      TITLE: '1D Stock Cutting',
+      TITLE_UPLOAD_ARIA: 'Load saved project from disk',
+      TITLE_DOWNLOAD_ARIA: 'Save project to disk',
 
-  $translateProvider.translations('en', {
-    TITLE: '1D Stock Cutting',
-    TITLE_UPLOAD_ARIA: 'Load saved project from disk',
-    TITLE_DOWNLOAD_ARIA: 'Save project to disk',
+      FORM_NAME: 'Project Name',
+      FORM_UNITS: 'Units',
+      FORM_STOCK: 'Stock Length',
+      FORM_CUT: 'Cut Width',
+      FORM_ALGORITHM: 'Algorithm',
+      FORM_BUTTON_ADD: 'ADD PART',
+      FORM_ADD_ARIA: 'Add Part',
+      FORM_PART_LENGTH: 'Length',
+      FORM_PART_QTT: 'Quantity',
+      FORM_PART_REMOVE_ARIA: 'Remove part',
 
-    FORM_NAME: 'Project Name',
-    FORM_UNITS: 'Units',
-    FORM_STOCK: 'Stock Length',
-    FORM_CUT: 'Cut Width',
-    FORM_ALGORITHM: 'Algorithm',
-    FORM_BUTTON_ADD: 'ADD PART',
-    FORM_ADD_ARIA: 'Add Part',
-    FORM_PART_LENGTH: 'Length',
-    FORM_PART_QTT : 'Quantity',
-    FORM_PART_REMOVE_ARIA: 'Remove part',
+      RESULT_TITLE: 'Cut List',
+      RESULT_PRINT_ARIA: 'Print Cut List',
+      RESULT_INVENTORY: 'Inventory',
+      RESULT_STOCK_NEEDED: 'Stock Needed',
+      RESULT_TOTAL_LENGTH: 'Total Length',
+      RESULT_WASTE: 'Waste',
 
-    RESULT_TITLE: 'Cut List',
-    RESULT_PRINT_ARIA: 'Print Cut List',
-    RESULT_INVENTORY: 'Inventory',
-    RESULT_STOCK_NEEDED: 'Stock Needed',
-    RESULT_TOTAL_LENGTH: 'Total Length',
-    RESULT_WASTE: 'Waste',
+      RESULT_CUT_LIST: 'Cut List',
+      RESULT_STOCK_PREFIX: 'Stock ',
 
-    RESULT_CUT_LIST: 'Cut List',
-    RESULT_STOCK_PREFIX: 'Stock ',
-  });
-  $translateProvider.translations('ro', {
-    TITLE: 'Taiere optimizata 1D',
-    TITLE_UPLOAD_ARIA: 'Incarca proiect salvat pe hard-disk',
-    TITLE_DOWNLOAD_ARIA: 'Salvare proiect pe hard-disk',
+      BARS: 'bars',
+      OF: 'of',
+      OF_TYPE: 'of type',
 
-    FORM_NAME: 'Nume proiect',
-    FORM_UNITS: 'Unitate de masura (i.e. m)',
-    FORM_STOCK: 'Lungime stoc (i.e. 12)',
-    FORM_CUT: 'Marime taietura (i.e. 0.1)',
-    FORM_ALGORITHM: 'Algoritm',
-    FORM_BUTTON_ADD: 'Adauga parte de taiat',
-    FORM_ADD_ARIA: 'Adauga parte de taiat',
-    FORM_PART_LENGTH: 'Lungime',
-    FORM_PART_QTT: 'Cantitate',
-    FORM_PART_REMOVE_ARIA: 'Sterge',
+      SUMMARY: 'Summary',
+      TABLE: 'Table',
+      DETAILS: 'Complete result'
+    });
+    $translateProvider.translations('ro', {
+      TITLE: 'Taiere optimizata 1D',
+      TITLE_UPLOAD_ARIA: 'Incarca proiect salvat pe hard-disk',
+      TITLE_DOWNLOAD_ARIA: 'Salvare proiect pe hard-disk',
 
-    RESULT_TITLE: 'Lista taieturi',
-    RESULT_PRINT_ARIA: 'Printeaza lista taieturi',
-    RESULT_INVENTORY: 'Inventar',
-    RESULT_STOCK_NEEDED: 'Stoc necesar',
-    RESULT_TOTAL_LENGTH: 'Marime totala',
-    RESULT_WASTE: 'Pierderi',
+      FORM_NAME: 'Nume proiect',
+      FORM_UNITS: 'Unitate de masura (i.e. m)',
+      FORM_STOCK: 'Lungime stoc (i.e. 12)',
+      FORM_CUT: 'Marime taietura (i.e. 0.1)',
+      FORM_ALGORITHM: 'Algoritm',
+      FORM_BUTTON_ADD: 'Adauga parte de taiat',
+      FORM_ADD_ARIA: 'Adauga parte de taiat',
+      FORM_PART_LENGTH: 'Lungime',
+      FORM_PART_QTT: 'Cantitate',
+      FORM_PART_REMOVE_ARIA: 'Sterge',
 
-    RESULT_CUT_LIST: 'Lista taieturi',
-    RESULT_STOCK_PREFIX: 'Stoc ',
-  });
-  $translateProvider
-    .registerAvailableLanguageKeys(['ro', 'en'], {
+      RESULT_TITLE: 'Rezultat',
+      RESULT_PRINT_ARIA: 'Printeaza lista taieturi',
+      RESULT_INVENTORY: 'Inventar',
+      RESULT_STOCK_NEEDED: 'Stoc necesar',
+      RESULT_TOTAL_LENGTH: 'Marime totala',
+      RESULT_WASTE: 'Pierderi',
+
+      RESULT_CUT_LIST: 'Lista taieturi',
+      RESULT_STOCK_PREFIX: 'Stoc ',
+
+      BARS: 'bare',
+      OF: 'de',
+      OF_TYPE: 'de tip',
+
+      SUMMARY: 'Pe scurt',
+      TABLE: 'Tabel',
+      DETAILS: 'Rezultat complet'
+    });
+    $translateProvider
+      .registerAvailableLanguageKeys(['ro', 'en'], {
         'ro*': 'ro',
-        'en*': 'en',
-     })
-    .fallbackLanguage('en')
-    .useSanitizeValueStrategy('escape');
+        'en*': 'en'
+      })
+      .fallbackLanguage('en')
+      .useSanitizeValueStrategy('escape');
 
-  $translateProvider.preferredLanguage('ro');
-}]);
+    $translateProvider.preferredLanguage('ro');
+  }
+]);
 
-stockCutting.directive('onFinishRender',['$timeout', function ($timeout) {
-  return {
-    restrict: 'A',
-      link: function (scope, element, attr) {
+stockCutting.directive('onFinishRender', [
+  '$timeout',
+  function($timeout) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attr) {
         if (scope.$last === true) {
-          $timeout(function () {
+          $timeout(function() {
             scope.$emit(attr.onFinishRender);
           });
         }
       }
-  };
-}]);
+    };
+  }
+]);
 
-stockCutting.controller('1DCtrl', ['$scope','$localStorage','$window','$timeout', 'Upload', function($scope, $localStorage, $window, $timeout, $upload) {
-  $scope.algorithms = [
-    {method:"next_fit", name:'Next Fit'},
-    {method:"first_fit", name:'First Fit'},
-    {method:"best_fit", name:'Best Fit'},
-    {method:"worst_fit", name:'Worst Fit'},
-    {method:"best_fit_decreasing", name:'Best Fit Decreasing'},
-    {method:"worst_fit_decreasing", name:'Worst Fit Decreasing'}
-  ];
+stockCutting.controller('1DCtrl', [
+  '$scope',
+  '$localStorage',
+  '$window',
+  '$timeout',
+  'Upload',
+  function($scope, $localStorage, $window, $timeout, $upload) {
+    $scope.view = 'summary';
 
-  $scope.units = [
-    'mm',
-    'cm',
-    'm',
-    'in',
-    'ft'
-  ];
+    $scope.algorithms = [
+      { method: 'next_fit', name: 'Next Fit' },
+      { method: 'first_fit', name: 'First Fit' },
+      { method: 'best_fit', name: 'Best Fit' },
+      { method: 'worst_fit', name: 'Worst Fit' },
+      { method: 'best_fit_decreasing', name: 'Best Fit Decreasing' },
+      { method: 'worst_fit_decreasing', name: 'Worst Fit Decreasing' }
+    ];
 
-  $scope.project = $localStorage.$default({
-    name:'Proiect #1',
-    alg:4,
-    cutSize:0,
-    parts: [],
-    stockLength:12,
-    units: 'm'
-  });
+    $scope.units = ['mm', 'cm', 'm', 'in', 'ft'];
 
-  $scope.cutList = {};
-
-  $scope.changeLanguage = function (key) {
-    $translate.use(key);
-  };
-
-  $scope.pack1D = function(method, cutSize, parts, stockLength) {
-    var items = [];
-    for (var i = 0;i<parts.length;i++) {
-      if (parts[i].size !== undefined) {
-        for (var j = 0;j < parts[i].quantity; j++) {
-          items.push(parts[i].size+cutSize);
-        }
-      }
-    }
-    var bins = new Array(items.length);
-    var fn = window[method];
-    var binsUsed;
-    if (typeof fn === "function") {
-      binsUsed = fn.apply(null, [stockLength, items, bins]);
-    }
-    var result = {};
-    result.binsUsed = binsUsed;
-    result.items = [];
-    result.cutSize = cutSize;
-    result.stockLength = stockLength;
-    for (i = 0;i<items.length;i++) {
-      result.items.push({length: items[i],bin: bins[i]});
-    }
-    result.items.sort(function (a, b) {
-      if (a.bin > b.bin)
-        return 1;
-      if (a.bin < b.bin)
-        return -1;
-      return 0;
+    $scope.project = $localStorage.$default({
+      name: 'Proiect #1',
+      alg: 4,
+      cutSize: 0,
+      parts: [],
+      stockLength: 12,
+      units: 'm'
     });
-    for (i = 0;i<items.length;i++) {
-      items[i] = items[i]-cutSize;
-    }
-    $scope.createCutList(result);
-  };
 
-  $scope.createCutList = function(source) {
-    var fillColors = [
-      'rgba(54, 162, 235, 0.4)',
-      'rgba(255, 206, 86, 0.4)',
-      'rgba(75, 192, 192, 0.4)',
-      'rgba(153, 102, 255, 0.4)',
-      'rgba(255, 159, 64, 0.4)'
-    ];
+    $scope.cutList = {};
 
-    var strokeColors = [
-      'rgb(54, 162, 235)',
-      'rgb(255, 206, 86)',
-      'rgb(75, 192, 192)',
-      'rgb(153, 102, 255)',
-      'rgb(255, 159, 64)'
-    ];
-
-    var barFillColor = 'rgba(80,80,80,0.1)';
-    var barStrokeColor = 'rgba(50,50,50)';
-
-    var totalLength = 0;
-
-    $scope.cutList = {
-      nbStock:source.binsUsed,
-      cutSize: source.cutSize,
-      stockLength: source.stockLength,
-      totalStockLength: source.binsUsed*source.stockLength,
-      fillColor: barFillColor,
-      strokeColor: barStrokeColor,
-      bins: new Array(source.binsUsed)
+    $scope.changeLanguage = function(key) {
+      $translate.use(key);
     };
 
-    var colors = [];
-    for (var i in source.items) {
-      var item = source.items[i];
-      if (colors.indexOf(item.length-source.cutSize) == -1) {
-        colors.push(item.length-source.cutSize);
-      }
-    }
+    $scope.setView = function(viewId) {
+      $scope.view = viewId;
+    };
 
-    for (i in source.items) {
-      totalLength += source.items[i].length-source.cutSize;
-      if ($scope.cutList.bins[source.items[i].bin] === undefined) {
-        $scope.cutList.bins[source.items[i].bin] = [];
-      }
-
-      var part = {
-        length: source.items[i].length-source.cutSize,
-        label: (source.items[i].bin+1)+"."+($scope.cutList.bins[source.items[i].bin].length+1),
-        fillColor: fillColors[colors.indexOf(source.items[i].length-source.cutSize)%fillColors.length],
-        strokeColor: strokeColors[colors.indexOf(source.items[i].length-source.cutSize)%strokeColors.length]
-      };
-      $scope.cutList.bins[source.items[i].bin].push(part);
-    }
-
-    for (i in $scope.cutList.bins) {
-      $scope.cutList.bins[i].sort(function (a, b) {
-        if (a.length < b.length)
-          return 1;
-        if (a.length > b.length)
-          return -1;
-        return 0;
-      });
-    }
-
-    for (var bin in $scope.cutList.bins) {
-      var obj = { };
-      var arr = $scope.cutList.bins[bin];
-
-      for (i = 0, j = arr.length; i < j; i++) {
-         obj[arr[i].length] = (obj[arr[i].length] || 0) + 1;
-      }
-      $scope.cutList.bins[bin].parts = obj;
-      var partsString = "";
-      for (var p = Object.keys(obj).length-1; p >= 0; p--) {
-        partsString += obj[Object.keys(obj)[p]]+" x "+Object.keys(obj)[p]+""+$scope.project.units;
-        if (p !== 0) {
-          partsString += " + ";
+    $scope.pack1D = function(method, cutSize, parts, stockLength) {
+      var items = [];
+      for (var i = 0; i < parts.length; i++) {
+        if (parts[i].size !== undefined) {
+          for (var j = 0; j < parts[i].quantity; j++) {
+            items.push(parts[i].size + cutSize);
+          }
         }
       }
-      $scope.cutList.bins[bin].description = partsString;
-    }
-    $scope.cutList.totalLength = totalLength;
-    $scope.cutList.waste = source.binsUsed*source.stockLength-totalLength;
-  };
-
-  $scope.removePart = function(id) {
-    $scope.project.parts.splice(id,1);
-    $scope.submit();
-  };
-
-  $scope.addPart = function() {
-    $scope.project.parts.push({size:$scope.project.stockLength, quantity:1});
-    $scope.submit();
-  };
-
-  $scope.submit = function () {
-    $scope.pack1D($scope.algorithms[$scope.project.alg].method,$scope.project.cutSize,$scope.project.parts,$scope.project.stockLength);
-  };
-
-  $scope.downloadProject = function() {
-    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify($scope.project));
-    var dlAnchorElem = document.getElementById('downloadAnchorElem');
-    dlAnchorElem.setAttribute("href", dataStr);
-    dlAnchorElem.setAttribute("download", $scope.project.name+".json");
-    dlAnchorElem.click();
-  };
-
-  $scope.uploadProject = function(file, errFiles) {
-    $scope.f = file;
-    $scope.errFile = errFiles && errFiles[0];
-    if (file) {
-      file.upload = $upload.upload({
-        url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
-        data: {file: file}
-      });
-
-      file.upload.then(function (response) {
-        $timeout(function () {
-          file.result = response.data;
-          var reader = new FileReader();
-          reader.addEventListener('load', function() {
-            $scope.$apply(function() {
-              var loadedJSON = JSON.parse(reader.result);
-              for (var i in Object.keys(loadedJSON)) {
-                $scope.project[Object.keys(loadedJSON)[i]] = loadedJSON[Object.keys(loadedJSON)[i]];
-              }
-              $scope.submit();
-            });
-          });
-          reader.readAsText(file,'UTF-8');
-        });
-      }, function (response) {
-        if (response.status > 0)
-          $scope.errorMsg = response.status + ': ' + response.data;
-      }, function (evt) {
-        file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-      });
-    }
-  };
-
-  $scope.save = function() {
-    $localStorage.message = $scope.project;
-  };
-
-  $scope.drawBars = function(width) {
-    for (var i in $scope.cutList.bins) {
-      var bin = $scope.cutList.bins[i];
-      var draw = SVG('drawing-'+i).size(width,35);
-      draw.rect('100%',35).fill({color:'#FFF'});
-      var el = document.getElementById('drawing-'+i);
-      var rect = el.getBoundingClientRect();
-      draw.rect('100%',35).fill({color:$scope.cutList.fillColor}).stroke({color:$scope.cutList.strokeColor});
-      var xOffset = 0;
-      var scaleRatio = rect.width/$scope.cutList.stockLength;
-      for (var j = 0; j < bin.length;j++) {
-        draw
-          .rect(bin[j].length*scaleRatio,35)
-          .fill({ color: bin[j].fillColor})
-          .stroke({ color: bin[j].strokeColor})
-          .translate(xOffset*scaleRatio,0);
-        draw
-          .text(bin[j].length+"")
-          .font({
-            family:   'Helvetica',
-            size:     12,
-            anchor:   'middle',
-            leading: '1.8em'
-          })
-          .fill({color:'rgba(0,0,0,0.5)'})
-          .translate((xOffset+bin[j].length/2)*scaleRatio,0);
-        xOffset += bin[j].length+$scope.cutList.cutSize;
+      var bins = new Array(items.length);
+      var fn = window[method];
+      var binsUsed;
+      if (typeof fn === 'function') {
+        binsUsed = fn.apply(null, [stockLength, items, bins]);
       }
-    }
-  };
+      var result = {};
+      result.binsUsed = binsUsed;
+      result.items = [];
+      result.cutSize = cutSize;
+      result.stockLength = stockLength;
+      for (i = 0; i < items.length; i++) {
+        result.items.push({ length: items[i], bin: bins[i] });
+      }
+      result.items.sort(function(a, b) {
+        if (a.bin > b.bin) return 1;
+        if (a.bin < b.bin) return -1;
+        return 0;
+      });
+      for (i = 0; i < items.length; i++) {
+        items[i] = items[i] - cutSize;
+      }
+      $scope.createCutList(result);
+    };
 
-  $scope.print = function() {
-    $scope.drawBars(210-30+'mm');
-    window.print();
-  };
+    $scope.createCutList = function(source) {
+      var fillColors = [
+        'rgba(54, 162, 235, 0.4)',
+        'rgba(255, 206, 86, 0.4)',
+        'rgba(75, 192, 192, 0.4)',
+        'rgba(153, 102, 255, 0.4)',
+        'rgba(255, 159, 64, 0.4)'
+      ];
 
-  var w = angular.element($window);
+      var strokeColors = [
+        'rgb(54, 162, 235)',
+        'rgb(255, 206, 86)',
+        'rgb(75, 192, 192)',
+        'rgb(153, 102, 255)',
+        'rgb(255, 159, 64)'
+      ];
 
-  w.onbeforprint = function() {
-    console.log("GOING TO PRINT");
-  };
+      var barFillColor = 'rgba(80,80,80,0.1)';
+      var barStrokeColor = 'rgba(50,50,50)';
 
-  w.bind('resize', function () {
-    $scope.$emit('ngRepeatFinished');
-  });
+      var totalLength = 0;
 
-  $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
-    $scope.drawBars('100%');
-  });
+      $scope.cutList = {
+        nbStock: source.binsUsed,
+        cutSize: source.cutSize,
+        stockLength: source.stockLength,
+        totalStockLength: source.binsUsed * source.stockLength,
+        fillColor: barFillColor,
+        strokeColor: barStrokeColor,
+        bins: new Array(source.binsUsed)
+      };
 
-  $scope.submit();
-}]);
+      var colors = [];
+      for (var i in source.items) {
+        var item = source.items[i];
+        if (colors.indexOf(item.length - source.cutSize) == -1) {
+          colors.push(item.length - source.cutSize);
+        }
+      }
+
+      for (i in source.items) {
+        totalLength += source.items[i].length - source.cutSize;
+        if ($scope.cutList.bins[source.items[i].bin] === undefined) {
+          $scope.cutList.bins[source.items[i].bin] = [];
+        }
+
+        var part = {
+          length: source.items[i].length - source.cutSize,
+          label: source.items[i].bin + 1 + '.' + ($scope.cutList.bins[source.items[i].bin].length + 1),
+          fillColor: fillColors[colors.indexOf(source.items[i].length - source.cutSize) % fillColors.length],
+          strokeColor: strokeColors[colors.indexOf(source.items[i].length - source.cutSize) % strokeColors.length]
+        };
+        $scope.cutList.bins[source.items[i].bin].push(part);
+      }
+
+      for (i in $scope.cutList.bins) {
+        $scope.cutList.bins[i].sort(function(a, b) {
+          if (a.length < b.length) return 1;
+          if (a.length > b.length) return -1;
+          return 0;
+        });
+      }
+
+      for (var bin in $scope.cutList.bins) {
+        var obj = {};
+        var arr = $scope.cutList.bins[bin];
+
+        for (i = 0, j = arr.length; i < j; i++) {
+          obj[arr[i].length] = (obj[arr[i].length] || 0) + 1;
+        }
+        $scope.cutList.bins[bin].parts = obj;
+        var partsString = '';
+        for (var p = Object.keys(obj).length - 1; p >= 0; p--) {
+          partsString += obj[Object.keys(obj)[p]] + ' x ' + Object.keys(obj)[p] + '' + $scope.project.units;
+          if (p !== 0) {
+            partsString += ' + ';
+          }
+        }
+        $scope.cutList.bins[bin].description = partsString;
+      }
+
+      if ($scope.cutList.bins && $scope.cutList.bins.length) {
+        $scope.cutList.groupedBins = _.reduce(
+          $scope.cutList.bins,
+          function(acc, cur) {
+            var clonedAcc = _.clone(acc);
+            var type = _.reduce(
+              cur,
+              function(acc1, cur1) {
+                return acc1 + cur1.length;
+              },
+              ''
+            );
+
+            var typeIndex = _.findIndex(acc, function(item) {
+              return item.type === type;
+            });
+
+            var typeItem = _.find(acc, function(item) {
+              return item.type === type;
+            });
+
+            if (typeIndex !== -1) {
+              var firstPart = clonedAcc.slice(0, typeIndex);
+              var lastPart = clonedAcc.slice(typeIndex + 1);
+              var newTypeItem = _.clone(typeItem);
+              newTypeItem.count += 1;
+
+              return _.concat(firstPart, newTypeItem, lastPart);
+            } else {
+              var newItem = {
+                bins: cur,
+                type: type,
+                count: 1
+              };
+              return _.concat(clonedAcc, newItem);
+            }
+          },
+          []
+        );
+      }
+
+      $scope.cutList.totalLength = totalLength;
+      $scope.cutList.waste = source.binsUsed * source.stockLength - totalLength;
+    };
+
+    $scope.removePart = function(id) {
+      $scope.project.parts.splice(id, 1);
+      $scope.submit();
+    };
+
+    $scope.addPart = function() {
+      $scope.project.parts.push({ size: $scope.project.stockLength, quantity: 1 });
+      $scope.submit();
+    };
+
+    $scope.submit = function() {
+      $scope.pack1D(
+        $scope.algorithms[$scope.project.alg].method,
+        $scope.project.cutSize,
+        $scope.project.parts,
+        $scope.project.stockLength
+      );
+    };
+
+    $scope.downloadProject = function() {
+      var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify($scope.project));
+      var dlAnchorElem = document.getElementById('downloadAnchorElem');
+      dlAnchorElem.setAttribute('href', dataStr);
+      dlAnchorElem.setAttribute('download', $scope.project.name + '.json');
+      dlAnchorElem.click();
+    };
+
+    $scope.uploadProject = function(file, errFiles) {
+      $scope.f = file;
+      $scope.errFile = errFiles && errFiles[0];
+      if (file) {
+        file.upload = $upload.upload({
+          url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
+          data: { file: file }
+        });
+
+        file.upload.then(
+          function(response) {
+            $timeout(function() {
+              file.result = response.data;
+              var reader = new FileReader();
+              reader.addEventListener('load', function() {
+                $scope.$apply(function() {
+                  var loadedJSON = JSON.parse(reader.result);
+                  for (var i in Object.keys(loadedJSON)) {
+                    $scope.project[Object.keys(loadedJSON)[i]] = loadedJSON[Object.keys(loadedJSON)[i]];
+                  }
+                  $scope.submit();
+                });
+              });
+              reader.readAsText(file, 'UTF-8');
+            });
+          },
+          function(response) {
+            if (response.status > 0) $scope.errorMsg = response.status + ': ' + response.data;
+          },
+          function(evt) {
+            file.progress = Math.min(100, parseInt((100.0 * evt.loaded) / evt.total));
+          }
+        );
+      }
+    };
+
+    $scope.save = function() {
+      $localStorage.message = $scope.project;
+    };
+
+    $scope.drawBars = function(width) {
+      for (var i in $scope.cutList.bins) {
+        if (!document.getElementById('drawing-' + i)) {
+          return false;
+        }
+
+        var bin = $scope.cutList.bins[i];
+        var draw = SVG('drawing-' + i).size(width, 35);
+
+        draw.rect('100%', 35).fill({ color: '#FFF' });
+        var el = document.getElementById('drawing-' + i);
+        var rect = el.getBoundingClientRect();
+        draw
+          .rect('100%', 35)
+          .fill({ color: $scope.cutList.fillColor })
+          .stroke({ color: $scope.cutList.strokeColor });
+        var xOffset = 0;
+        var scaleRatio = rect.width / $scope.cutList.stockLength;
+        for (var j = 0; j < bin.length; j++) {
+          draw
+            .rect(bin[j].length * scaleRatio, 35)
+            .fill({ color: bin[j].fillColor })
+            .stroke({ color: bin[j].strokeColor })
+            .translate(xOffset * scaleRatio, 0);
+          draw
+            .text(bin[j].length + '')
+            .font({
+              family: 'Helvetica',
+              size: 12,
+              anchor: 'middle',
+              leading: '1.8em'
+            })
+            .fill({ color: 'rgba(0,0,0,0.5)' })
+            .translate((xOffset + bin[j].length / 2) * scaleRatio, 0);
+          xOffset += bin[j].length + $scope.cutList.cutSize;
+        }
+      }
+    };
+
+    $scope.print = function() {
+      $scope.drawBars(210 - 30 + 'mm');
+      window.print();
+    };
+
+    var w = angular.element($window);
+
+    w.onbeforprint = function() {
+      console.log('GOING TO PRINT');
+    };
+
+    w.bind('resize', function() {
+      $scope.$emit('ngRepeatFinished');
+    });
+
+    $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
+      $scope.drawBars('100%');
+    });
+
+    $scope.submit();
+  }
+]);

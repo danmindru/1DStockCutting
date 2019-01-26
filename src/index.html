@@ -12,6 +12,7 @@
 
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
   <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
   <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="styles/lib.min.css">
   <link rel="stylesheet" href="styles/styles.min.css">
@@ -61,7 +62,7 @@
               <label>{{'FORM_STOCK' | translate}}</label>
               <input type="number" min="1" ng-model="project.stockLength" ng-change="submit()">
             </md-input-container>
-            <md-input-container class="md-block" flex-gt-sm>
+            <md-input-container class="md-block" flex-gt-sm style="display: none">
               <label>{{'FORM_CUT' | translate}}</label>
               <input type="number" min="0" max="{{project.stockLength}}" ng-model="project.cutSize" ng-change="submit()">
             </md-input-container>
@@ -110,6 +111,13 @@
             <md-icon md-font-set="material-icons" class="printRemove">print</md-icon>
           </md-button>
         </md-toolbar>
+
+        <span class="printRemove">
+          <md-button ng-click="setView('summary')" ng-class="{'md-primary': view === 'summary'}">{{'SUMMARY' | translate}}</md-button>
+          <!-- <md-button ng-click="setView('table')" ng-class="{'md-primary': view === 'table'}">{{'TABLE' | translate}}</md-button> -->
+          <md-button ng-click="setView('details')" ng-class="{'md-primary': view === 'details'}">{{'DETAILS' | translate}}</md-button>
+        </span>
+
         <md-card flex>
           <md-card-title>
             <md-card-title-text>
@@ -118,27 +126,66 @@
           </md-card-title>
           <md-divider></md-divider>
           <md-card-content layout="row">
-            <div flex><p><b>{{'RESULT_STOCK_NEEDED' | translate}}</b><br/>
-            {{cutList.nbStock}} x {{cutList.stockLength}}{{project.units}} ({{cutList.totalStockLength}}{{project.units}})</p></div>
-            <div flex><p><b>{{'RESULT_TOTAL_LENGTH' | translate}}</b><br/>
-            {{cutList.totalLength}}{{project.units}}</p></div>
-            <div flex><p><b>{{'RESULT_WASTE' | translate}}</b><br/>
-            {{cutList.waste}}{{project.units}}</p></div>
+            <div flex>
+              <p><b>{{'RESULT_STOCK_NEEDED' | translate}}</b><br />
+                {{cutList.nbStock}} x {{cutList.stockLength}}{{project.units}} ({{cutList.totalStockLength}}{{project.units}})</p>
+            </div>
+            <div flex>
+              <p><b>{{'RESULT_TOTAL_LENGTH' | translate}}</b><br />
+                {{cutList.totalLength}}{{project.units}}</p>
+            </div>
+            <div flex>
+              <p><b>{{'RESULT_WASTE' | translate}}</b><br />
+                {{cutList.waste}}{{project.units}}</p>
+            </div>
           </md-card-content>
         </md-card>
-        <md-card id="cutlist-graphs">
-          <md-card-title>
-            <md-card-title-text>
-              <span class="md-headline">{{'RESULT_CUT_LIST' | translate}}</span>
-            </md-card-title-text>
-          </md-card-title>
-          <md-divider></md-divider>
-          <md-card-content ng-repeat="bin in cutList.bins" ng-value="$index" on-finish-render="ngRepeatFinished">
-            <p><b>{{'RESULT_STOCK_PREFIX' | translate}} #{{$index+1}}</b> - {{bin.description}}</p>
-            <div class="svgcontainer"><svg id="drawing-{{$index}}"></svg></div>
-            <md-divider ng-if="!$last"></md-divider>
-          </md-card-content>
-        </md-card>
+
+        <div ng-if="view === 'summary'">
+          <md-card id="cutlist-graphs">
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">{{'RESULT_CUT_LIST' | translate}}</span>
+              </md-card-title-text>
+            </md-card-title>
+            <md-divider></md-divider>
+
+            <span class="cutlist-bars-container" ng-repeat="groupedBin in cutList.groupedBins">
+              <div class="cutlist-bars-title">
+                <b>{{groupedBin.count}}</b>x {{'BARS' | translate}} {{'OF' | translate}} {{project.stockLength}}{{project.units}}, {{'OF_TYPE' | translate}}:
+              </div>
+
+              <div class="cutlist-bars">
+                <md-card-content ng-repeat="bin in groupedBin.bins" ng-value="$index" style="flex-grow: {{bin.length}}">
+                  <span class="cutlist-bar" style="background-color: {{bin.fillColor}}; border: 1px solid {{bin.strokeColor}}">
+                    {{bin.length}} {{project.units}}
+                  </span>
+                </md-card-content>
+              </div>
+            </span>
+          </md-card>
+        </div>
+
+        <!-- <div ng-if="view === 'table'">
+          Table (TODO)
+        </div> -->
+
+        <div ng-if="view === 'details'">
+          <md-card id="cutlist-graphs">
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">{{'RESULT_CUT_LIST' | translate}}</span>
+              </md-card-title-text>
+            </md-card-title>
+            <md-divider></md-divider>
+            <md-card-content ng-repeat="bin in cutList.bins" ng-value="$index" on-finish-render="ngRepeatFinished">
+              <p><b>{{'RESULT_STOCK_PREFIX' | translate}} #{{$index+1}}</b> - {{bin.description}}</p>
+              <div class="svgcontainer"><svg id="drawing-{{$index}}"></svg></div>
+              <md-divider ng-if="!$last"></md-divider>
+            </md-card-content>
+          </md-card>
+        </div>
+
       </div>
     </div>
 

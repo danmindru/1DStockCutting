@@ -61,6 +61,7 @@ md-card-content {
     display:none !important;
   }
   .printSection {
+    width: 100%;
     background-color: #FFF !important;
   }
   .printOnly, .printOnly *{
@@ -91,4 +92,38 @@ md-card-content {
   .removePrintButton{
     display: none !important;
   }
+}
+
+.cutlist-bars {
+  display: flex;
+}
+
+.cutlist-bars > md-card-content {
+  margin: 0;
+  padding: 0!important;
+}
+
+.cutlist-bar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 35px;
+  margin: 0;
+  padding: 0;
+}
+
+.cutlist-bars-container {
+  padding: 16px;
+}
+
+.cutlist-bars-title {
+  margin-bottom: 8px;
+}
+
+.md-button.md-primary,
+.md-button.md-primary:hover,
+.md-button.md-primary:focus {
+  background-color: black;
+  color: white;
 }
