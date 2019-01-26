@@ -156,8 +156,14 @@
               </div>
 
               <div class="cutlist-bars">
-                <md-card-content ng-repeat="bin in groupedBin.bins" ng-value="$index" style="flex-grow: {{bin.length}}">
-                  <span class="cutlist-bar" style="background-color: {{bin.fillColor}}; border: 1px solid {{bin.strokeColor}}">
+                <md-card-content
+                  ng-repeat="bin in groupedBin.bins"
+                  ng-value="$index"
+                  style=" width: {{100 * bin.length / project.stockLength}}%"
+                >
+                  <span
+                    class="cutlist-bar"
+                    style="background-color: {{bin.fillColor}}; border: 1px solid {{bin.strokeColor}}">
                     {{bin.length}} {{project.units}}
                   </span>
                 </md-card-content>
